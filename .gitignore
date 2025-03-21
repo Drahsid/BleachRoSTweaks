@@ -1,0 +1,6 @@
+*.o
+*.asi
+*.exp
+*.lib
+.vscode
+.ninja_log

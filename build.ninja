@@ -1,0 +1,42 @@
+# build.ninja for bleachtweaks.asi
+
+# Compiler and linker
+cxx = clang
+cc = clang
+
+# Compiler flags
+cflags = -I .
+cxxflags = -I . -std=c++23
+
+# Rules for building
+rule cc
+  command = $cc $cflags -c $in -o $out
+  description = CC $out
+
+rule cxx
+  command = $cxx $cxxflags -c $in -o $out
+  description = CXX $out
+
+rule link
+  command = $cxx -shared -o $out $in -lkernel32
+  description = LINK $out
+
+rule clean
+  command = clean.bat
+  description = CLEAN
+
+# Build targets
+build Zydis.o: cc Zydis.c
+
+build safetyhook.o: cxx safetyhook.cpp
+build Memory.o: cxx Memory.cpp
+build ConsoleManager.o: cxx ConsoleManager.cpp
+build dllmain.o: cxx dllmain.cpp
+
+build bleachtweaks.asi: link Zydis.o safetyhook.o Memory.o ConsoleManager.o dllmain.o
+
+# Default target
+default bleachtweaks.asi
+
+# Clean target
+build clean: clean
